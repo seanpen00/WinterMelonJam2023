@@ -37,7 +37,7 @@ public class PlayerMovementScript : MonoBehaviour
     private void FixedUpdate()
     {
         // Move the player horizontally.
-        float moveDirection = Input.GetAxis("Horizontal");
+        float moveDirection = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
     }
 
