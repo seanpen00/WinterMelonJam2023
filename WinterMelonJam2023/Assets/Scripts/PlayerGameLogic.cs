@@ -11,6 +11,7 @@ public class PlayerGameLogic : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI text;
     int JUNK_COUNTER = 0;
+    public int HEALTH = 10;
 
     private void Awake()
     {
@@ -37,6 +38,14 @@ public class PlayerGameLogic : MonoBehaviour
     void Update()
     {
         // Your update logic here
+    }
+
+    private void FixedUpdate()
+    {
+        if (HEALTH <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
