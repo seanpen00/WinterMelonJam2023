@@ -10,35 +10,61 @@ public class PlayerMovementScript : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool canDoubleJump;
+    private PlayerGameLogic playerGameLogic;
+    private Animator anim;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerGameLogic = GetComponent<PlayerGameLogic>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        // Check if the player is grounded using a small circle at the player's feet.
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
-
-        // Reset double jump ability when grounded.
-        if (isGrounded)
+        if (playerGameLogic.HEALTH > 0)
         {
-            canDoubleJump = true;
-        }
+            // Check if the player is grounded using a small circle at the player's feet.
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.25f, groundLayer);
 
-        // Jump input.
-        if (Input.GetButtonDown("Jump"))
-        {
-            Jump();
+            // Reset double jump ability when grounded.
+            if (isGrounded)
+            {
+                canDoubleJump = true;
+            }
+
+            // Jump input.
+            if (Input.GetButtonDown("Jump"))
+            {
+                Jump();
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        // Move the player horizontally.
-        float moveDirection = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+        if (playerGameLogic.HEALTH > 0)
+        {
+            // Move the player horizontally.
+            float moveDirection = Input.GetAxisRaw("Horizontal");
+            rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+
+            // Set the "isRunning" parameter in the Animator based on the player's movement.
+            bool isRunning = Mathf.Abs(moveDirection) > 0.1f;
+            anim.SetBool("isRunning", isRunning);
+
+            // Flip the x scale of the game object based on the movement direction.
+            if (moveDirection > 0)
+            {
+                // Moving right.
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (moveDirection < 0)
+            {
+                // Moving left.
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+        }
     }
 
     private void Jump()

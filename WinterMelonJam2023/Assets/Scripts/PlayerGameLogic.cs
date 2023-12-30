@@ -10,8 +10,13 @@ public class PlayerGameLogic : MonoBehaviour
     private static PlayerGameLogic instance;
 
     [SerializeField] TextMeshProUGUI text;
-    int JUNK_COUNTER = 0;
+    [SerializeField] TextMeshProUGUI tutorialText;
+    private SpriteRenderer sr;
+    private Rigidbody2D rb;
+
+    public int JUNK_COUNTER = 0;
     public int HEALTH = 10;
+    bool IS_DEAD = false;
 
     private void Awake()
     {
@@ -31,6 +36,10 @@ public class PlayerGameLogic : MonoBehaviour
 
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+
+        StartCoroutine("deleteTutorialText");
         // You can initialize any other variables or settings here
     }
 
@@ -42,9 +51,12 @@ public class PlayerGameLogic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (HEALTH <= 0)
+        if (HEALTH <= 0 && IS_DEAD == false)
         {
-            Destroy(this.gameObject);
+            // Change to death animation
+            IS_DEAD = true;
+            StartCoroutine("death");
+
         }
     }
 
@@ -56,5 +68,28 @@ public class PlayerGameLogic : MonoBehaviour
             Destroy(collision.gameObject);
             text.text = "Junk Counter: " + JUNK_COUNTER;
         }
+    }
+
+    IEnumerator deleteTutorialText()
+    {
+        yield return new WaitForSeconds(5);
+        tutorialText.text = "";
+    }
+
+    IEnumerator death()
+    {
+        sr.enabled = false;
+        rb.velocity = new Vector2(0, 0);
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        yield return new WaitForSeconds(1);
+        IS_DEAD = false;
+        JUNK_COUNTER = 0;
+        HEALTH = 10;
+        text.text = "Junk Counter: " + JUNK_COUNTER;
+        transform.position = new Vector3(0, 0, 0);
+        rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+        sr.enabled = true;
+
+
     }
 }
