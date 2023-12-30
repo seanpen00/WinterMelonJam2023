@@ -14,7 +14,7 @@ public class PlayerGameLogic : MonoBehaviour
     private SpriteRenderer sr;
     private Rigidbody2D rb;
 
-    int JUNK_COUNTER = 0;
+    public int JUNK_COUNTER = 0;
     public int HEALTH = 10;
     bool IS_DEAD = false;
 
