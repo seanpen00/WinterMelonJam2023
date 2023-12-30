@@ -10,36 +10,21 @@ public class PlayerGameLogic : MonoBehaviour
     private static PlayerGameLogic instance;
 
     [SerializeField] TextMeshProUGUI text;
-    [SerializeField] TextMeshProUGUI tutorialText;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
 
     public int JUNK_COUNTER = 0;
     public int HEALTH = 10;
+    bool textFound = false;
     bool IS_DEAD = false;
-
-    private void Awake()
-    {
-        // Check if an instance already exists
-        if (instance == null)
-        {
-            // If not, set this instance as the singleton
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Persist this game object between scenes
-        }
-        else
-        {
-            // If an instance already exists, destroy this one
-            Destroy(gameObject);
-        }
-    }
+    bool cutscene = false;
 
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
 
-        StartCoroutine("deleteTutorialText");
+
         // You can initialize any other variables or settings here
     }
 
@@ -53,10 +38,21 @@ public class PlayerGameLogic : MonoBehaviour
     {
         if (HEALTH <= 0 && IS_DEAD == false)
         {
+            while (text == null && textFound == false)
+            {
+                textFound = true;
+                text = GameObject.Find("JunkCounter").GetComponent<TextMeshProUGUI>();
+            }
             // Change to death animation
             IS_DEAD = true;
             StartCoroutine("death");
 
+        }
+        if (JUNK_COUNTER == 3 && cutscene == false)
+        {
+            cutscene = true;
+
+            SceneManager.LoadScene("lvl. 1 cutscene");
         }
     }
 
@@ -70,11 +66,7 @@ public class PlayerGameLogic : MonoBehaviour
         }
     }
 
-    IEnumerator deleteTutorialText()
-    {
-        yield return new WaitForSeconds(5);
-        tutorialText.text = "";
-    }
+
 
     IEnumerator death()
     {
@@ -91,5 +83,11 @@ public class PlayerGameLogic : MonoBehaviour
         sr.enabled = true;
 
 
+    }
+
+    public void GoToLevelTwo()
+    {
+        SceneManager.LoadScene("Level2");
+        HEALTH -= 100;
     }
 }
