@@ -9,13 +9,13 @@ public class PlayerGameLogic : MonoBehaviour
     // Make sure there's only one instance of this script
     private static PlayerGameLogic instance;
 
-    [SerializeField] TextMeshProUGUI text;
-    [SerializeField] TextMeshProUGUI tutorialText;
+    TextMeshProUGUI text;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
 
     public int JUNK_COUNTER = 0;
     public int HEALTH = 10;
+    bool textFound = false;
     bool IS_DEAD = false;
 
     private void Awake()
@@ -39,7 +39,7 @@ public class PlayerGameLogic : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
 
-        StartCoroutine("deleteTutorialText");
+
         // You can initialize any other variables or settings here
     }
 
@@ -53,6 +53,11 @@ public class PlayerGameLogic : MonoBehaviour
     {
         if (HEALTH <= 0 && IS_DEAD == false)
         {
+            while (text == null && textFound == false)
+            {
+                textFound = true;
+                text = GameObject.Find("JunkCounter").GetComponent<TextMeshProUGUI>();
+            }
             // Change to death animation
             IS_DEAD = true;
             StartCoroutine("death");
@@ -70,11 +75,7 @@ public class PlayerGameLogic : MonoBehaviour
         }
     }
 
-    IEnumerator deleteTutorialText()
-    {
-        yield return new WaitForSeconds(5);
-        tutorialText.text = "";
-    }
+
 
     IEnumerator death()
     {
@@ -91,5 +92,11 @@ public class PlayerGameLogic : MonoBehaviour
         sr.enabled = true;
 
 
+    }
+
+    public void GoToLevelTwo()
+    {
+        SceneManager.LoadScene("Level2");
+        HEALTH -= 100;
     }
 }
