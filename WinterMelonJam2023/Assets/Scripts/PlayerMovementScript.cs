@@ -10,35 +10,43 @@ public class PlayerMovementScript : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool canDoubleJump;
+    private PlayerGameLogic playerGameLogic;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerGameLogic = GetComponent<PlayerGameLogic>();
     }
 
     private void Update()
     {
-        // Check if the player is grounded using a small circle at the player's feet.
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundLayer);
-
-        // Reset double jump ability when grounded.
-        if (isGrounded)
+        if (playerGameLogic.HEALTH > 0)
         {
-            canDoubleJump = true;
-        }
+            // Check if the player is grounded using a small circle at the player's feet.
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundLayer);
 
-        // Jump input.
-        if (Input.GetButtonDown("Jump"))
-        {
-            Jump();
+            // Reset double jump ability when grounded.
+            if (isGrounded)
+            {
+                canDoubleJump = true;
+            }
+
+            // Jump input.
+            if (Input.GetButtonDown("Jump"))
+            {
+                Jump();
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        // Move the player horizontally.
-        float moveDirection = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+        if (playerGameLogic.HEALTH > 0)
+        {
+            // Move the player horizontally.
+            float moveDirection = Input.GetAxisRaw("Horizontal");
+            rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+        }
     }
 
     private void Jump()
