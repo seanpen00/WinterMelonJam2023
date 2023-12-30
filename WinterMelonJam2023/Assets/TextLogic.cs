@@ -13,7 +13,6 @@ public class TextLogic : MonoBehaviour
 
     bool tutFound = false;
     bool junkFound = false;
-    bool playerFound = false;
     void Start()
     {
     }
@@ -31,11 +30,6 @@ public class TextLogic : MonoBehaviour
         {
             junkFound = true;
             JUNK_COUNTER = GameObject.Find("JunkCounter").GetComponent<TextMeshProUGUI>();
-        }
-        while (player == null && playerFound == false)
-        {
-            playerFound = true;
-            player = GameObject.Find("TheKevin").GetComponent<PlayerGameLogic>();
         }
     }
 

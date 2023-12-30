@@ -9,7 +9,7 @@ public class PlayerGameLogic : MonoBehaviour
     // Make sure there's only one instance of this script
     private static PlayerGameLogic instance;
 
-    TextMeshProUGUI text;
+    [SerializeField] TextMeshProUGUI text;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
 
@@ -17,22 +17,7 @@ public class PlayerGameLogic : MonoBehaviour
     public int HEALTH = 10;
     bool textFound = false;
     bool IS_DEAD = false;
-
-    private void Awake()
-    {
-        // Check if an instance already exists
-        if (instance == null)
-        {
-            // If not, set this instance as the singleton
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Persist this game object between scenes
-        }
-        else
-        {
-            // If an instance already exists, destroy this one
-            Destroy(gameObject);
-        }
-    }
+    bool cutscene = false;
 
     void Start()
     {
@@ -62,6 +47,12 @@ public class PlayerGameLogic : MonoBehaviour
             IS_DEAD = true;
             StartCoroutine("death");
 
+        }
+        if (JUNK_COUNTER == 3 && cutscene == false)
+        {
+            cutscene = true;
+
+            SceneManager.LoadScene("lvl. 1 cutscene");
         }
     }
 

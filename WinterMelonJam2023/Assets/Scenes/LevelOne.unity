@@ -4114,6 +4114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59bd3ef3c4e563348bc66ff2991131ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 306081047}
   JUNK_COUNTER: 0
   HEALTH: 10
 --- !u!70 &1096817651
