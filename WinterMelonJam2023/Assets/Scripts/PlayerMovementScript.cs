@@ -19,7 +19,7 @@ public class PlayerMovementScript : MonoBehaviour
     private void Update()
     {
         // Check if the player is grounded using a small circle at the player's feet.
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundLayer);
 
         // Reset double jump ability when grounded.
         if (isGrounded)
